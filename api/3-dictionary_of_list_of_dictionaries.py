@@ -24,8 +24,7 @@ def export_all_tasks():
         all_tasks = {}
         for user in users:
             user_id = str(user.get('id'))
-            user_tasks = []
-            
+            user_tasks = []            
             # Get tasks for current user
             for task in todos:
                 if task.get('userId') == user.get('id'):
