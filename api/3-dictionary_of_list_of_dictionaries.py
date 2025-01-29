@@ -34,7 +34,6 @@ def export_all_tasks():
                         "task": task.get('title'),
                         "completed": task.get('completed')
                     })
-            
             all_tasks[user_id] = user_tasks
 
         # Write to JSON file
