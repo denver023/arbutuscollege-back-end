@@ -18,22 +18,23 @@ def get_employee_todo_progress(employee_id):
     user_response = requests.get(f"{base_url}/users/{employee_id}")
     if user_response.status_code != 200:
         return
-    
     user_data = user_response.json()
     employee_name = user_data.get('name')
     
     # Get TODO list for employee
-    todos_response = requests.get(f"{base_url}/todos",
-                                params={'userId': employee_id})
+    todos_response = requests.get(
+        f"{base_url}/todos",
+        params={'userId': employee_id})
     if todos_response.status_code != 200:
         return
-    
     todos = todos_response.json()
     total_tasks = len(todos)
     done_tasks = sum(1 for todo in todos if todo.get('completed'))
     
     # Print progress
-    print(f"Employee {employee_name} is done with tasks({done_tasks}/{total_tasks}):")
+    print(
+        f"Employee {employee_name} is done with tasks({done_tasks}/{total_tasks}):"
+    )
     
     # Print completed task titles
     for todo in todos:
