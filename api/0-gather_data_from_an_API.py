@@ -15,36 +15,23 @@ def get_employee_todo_progress(employee_id):
     base_url = "https://jsonplaceholder.typicode.com"
 
     # Get employee information
-    user_response = requests.get(f"{base_url}/users/{employee_id}")
-    if user_response.status_code != 200:
+    user_url = "{}/users/{}".format(base_url, employee_id)
+    todo_url = "{}/todos".format(base_url)
+
+    try:
+        user = requests.get(user_url).json()
+        todos = requests.get(todo_url, params={'userId': employee_id}).json()
+
+        completed = [task for task in todos if task.get('completed')]
+        print("Employee {} is done with tasks({}/{}):".format(
+            user.get('name'), len(completed), len(todos)))
+        
+        for task in completed:
+            print("\t {}".format(task.get('title')))
+    except:
         return
-    user_data = user_response.json()
-    employee_name = user_data.get('name')
-
-    # Get TODO list for employee
-    todos_response = requests.get(
-        f"{base_url}/todos?userId={employee_id}")
-    if todos_response.status_code != 200:
-        return
-    todos = todos_response.json()
-    total_tasks = len(todos)
-    completed_tasks = [todo for todo in todos if todo.get('completed') is True]
-    done_tasks = len(completed_tasks)
-
-    # Print progress
-    print("Employee {} is done with tasks({}/{}):".format(
-        employee_name, done_tasks, total_tasks))
-
-    # Print completed task titles
-    for task in completed_tasks:
-        print("\t {}".format(task.get('title')))
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        sys.exit(1)
-    try:
-        employee_id = int(sys.argv[1])
-        get_employee_todo_progress(employee_id)
-    except ValueError:
-        sys.exit(1)
+    if len(sys.argv) == 2:
+        get_employee_todo_progress(int(sys.argv[1]))
