@@ -28,7 +28,7 @@ def get_employee_todo_progress(employee_id):
         
         for task in completed:
             print("\t {}".format(task.get('title')))
-    except:
+    except requests.RequestException:
         return
 
 
