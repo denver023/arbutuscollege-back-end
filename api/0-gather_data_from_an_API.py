@@ -23,23 +23,21 @@ def get_employee_todo_progress(employee_id):
 
     # Get TODO list for employee
     todos_response = requests.get(
-        f"{base_url}/todos",
-        params={'userId': employee_id})
+        f"{base_url}/todos?userId={employee_id}")
     if todos_response.status_code != 200:
         return
     todos = todos_response.json()
     total_tasks = len(todos)
-    done_tasks = sum(1 for todo in todos if todo.get('completed'))
+    completed_tasks = [todo for todo in todos if todo.get('completed') is True]
+    done_tasks = len(completed_tasks)
 
     # Print progress
-    template = "Employee {} is done with tasks({}/{}):".format(
-        employee_name, done_tasks, total_tasks)
-    print(template)
+    print("Employee {} is done with tasks({}/{}):".format(
+        employee_name, done_tasks, total_tasks))
 
     # Print completed task titles
-    for todo in todos:
-        if todo.get('completed'):
-            print(f"\t {todo.get('title')}")
+    for task in completed_tasks:
+        print("\t {}".format(task.get('title')))
 
 
 if __name__ == "__main__":
