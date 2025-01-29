@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-Script that exports TODO list information for a given employee ID to JSON format
+Script that exports TODO list information for a given employee ID to JSON
+format
 """
 import json
 import requests
